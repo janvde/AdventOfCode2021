@@ -17,7 +17,7 @@ fun calculateMostCommonValue(input: List<String>, position: Int): List<String> {
     }
 }
 
-fun calculateLeastCommonValue(input: List<String>, position: Int): List<String> {
+tailrec fun calculateLeastCommonValue(input: List<String>, position: Int): List<String> {
     return if (input.size == 1) input
     else {
         calculateLeastCommonValue(findLeastCommonValue(input, position), position + 1)
