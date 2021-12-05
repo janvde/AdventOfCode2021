@@ -23,7 +23,7 @@ tailrec fun solve(draws: List<Int>, cards: List<BingoCard>): Int {
     val winner = markedCards.findWinner()
 
     return if (winner != null) {
-        getUnmarkedSum(winner) * draws.first()//todo result
+        getUnmarkedSum(winner) * draws.first()
     } else {
         solve(draws.drop(1), markedCards)
     }
@@ -45,7 +45,11 @@ fun markCards(number: Int, cards: List<BingoCard>): List<BingoCard> {
 
 fun List<BingoCard>.findWinner(): BingoCard? = find { it.hasWon() }
 
-fun BingoCard.hasWon(): Boolean = numbers.any { lines -> lines.all { it.marked } }
+fun BingoCard.hasWon(): Boolean = hasColumnMatch() || hasRowMatch()
+
+fun BingoCard.hasColumnMatch() : Boolean = (0 until numbers.first().size).any { index -> numbers.all { it[index].marked }}
+
+fun BingoCard.hasRowMatch() : Boolean = numbers.any { lines -> lines.all { it.marked } }
 
 data class Number(val value: Int, var marked: Boolean)
 
