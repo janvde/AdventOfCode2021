@@ -3,32 +3,17 @@ package day13.part2
 import java.io.File
 
 fun main(args: Array<String>) {
-
-    fun Set<Dot>.foldX(value: Int): Set<Dot> = map {
-        if (it.x <= value) it else Dot(value - (it.x - value), it.y)
-    }.toSet()
-
-    fun Set<Dot>.foldY(value: Int): Set<Dot> = map {
-        if (it.y <= value) it else Dot(it.x, value - (it.y - value))
-    }.toSet()
+    fun Int.foldValue(value: Int): Int = if (this <= value) this else value - (this - value)
 
     fun Set<Dot>.fold(instruction: Instruction): Set<Dot> =
-        if (instruction.axis == 'x') foldX(instruction.value)
-        else foldY(instruction.value)
+        if (instruction.axis == 'x') map { Dot(it.x.foldValue(instruction.value), it.y) }.toSet()
+        else map { Dot(it.x, it.y.foldValue(instruction.value)) }.toSet()
 
-
-    fun Set<Dot>.convertString() : String {
-        val width = maxOf { it.x }
-        val height = maxOf { it.y }
-
-        return (0 .. height).map { yValue ->
-            (0 .. width).map {  xValue ->
-                if(contains(Dot(xValue, yValue))){
-                    "█"
-                } else " "
-            }.joinToString("")
-        }.joinToString("\n")
-    }
+    fun Set<Dot>.convertString(): String = (0..maxOf { it.y }).map { yValue ->
+        (0..maxOf { it.x }).joinToString("") { xValue ->
+            if (contains(Dot(xValue, yValue))) "█" else " "
+        }
+    }.joinToString("\n")
 
 
     val (dots, instructions) = readInput()
