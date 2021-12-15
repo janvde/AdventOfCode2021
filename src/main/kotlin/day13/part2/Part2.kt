@@ -1,4 +1,4 @@
-package day13.part1
+package day13.part2
 
 import java.io.File
 
@@ -17,10 +17,27 @@ fun main(args: Array<String>) {
         else foldY(instruction.value)
 
 
-    val (dots, instructions) = readInput()
-    val output = dots.fold(instructions.first())
+    fun Set<Dot>.convertString() : String {
+        val width = maxOf { it.x }
+        val height = maxOf { it.y }
 
-    println(output.count())
+        return (0 .. height).map { yValue ->
+            (0 .. width).map {  xValue ->
+                if(contains(Dot(xValue, yValue))){
+                    "█"
+                } else " "
+            }.joinToString("")
+        }.joinToString("\n")
+    }
+
+
+    val (dots, instructions) = readInput()
+
+    val output = instructions.fold(dots) { acc, instruction ->
+        acc.fold(instruction)
+    }
+
+    println(output.convertString())
 }
 
 data class Dot(val x: Int, val y: Int)
