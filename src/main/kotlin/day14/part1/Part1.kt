@@ -3,21 +3,24 @@ package day14.part1
 import java.io.File
 
 fun main(args: Array<String>) {
-    val (template, insertions) = readInput()
+    val (template, insertions) = day14.part2.readInput()
 
     fun List<String>.merge(): String = fold("") { acc, s -> acc.dropLast(1) + s }
 
-    (1..10)
-        .fold(template) { acc, i ->
-            acc.windowed(2, 1)
-                .map { "${it.first()}${insertions[it]}${it.last()}" }
-                .merge()
-        }
+    fun insert(pair: String, run: Int) : String {
+        if(run == 0 ) return pair
+        return "${pair.first()}${insertions[pair]}${pair.last()}"
+            .windowed(2,1)
+            .map {
+                insert(it, run -1) }
+            .merge()
+    }
+
+    template.windowed(2,1).map { insert(it, 10) }.merge()
         .toList()
         .groupingBy { it }
         .eachCount().values
         .let { println(it.maxOf { it } - it.minOf { it }) }
-
 }
 
 fun readInput(): Pair<String, Map<String, String>> {
