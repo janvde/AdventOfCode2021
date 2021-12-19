@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
         }
         else {
             val subPackets = mutableListOf<Pair<Packet, Int>>()
-            val lengthType = input.get(6).digitToInt()
+            val lengthType = input[6].digitToInt()
              return if(lengthType == 0){
                 //the next 15 bits are a number that represents the total length in bits of the sub-packets contained by this packet.
                 val subPacketLength = input.substring(7, 22).toInt(2)
@@ -54,8 +54,6 @@ fun main(args: Array<String>) {
                 }
                  Pair(Packet.Operator(version, typeId, lengthType, subPackets.map { it.first }), 6+1+11+subPackets.sumOf { it.second })
             }
-
-
         }
     }
 
@@ -80,5 +78,3 @@ sealed class Packet(version: Int, typeId: Int){
 }
 
 fun readInput(): String = File("src/main/kotlin/day16/input.txt").readLines().first()
-
-//110 100 01010
